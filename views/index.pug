@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  h1 Plant Monitoring Application
+  section.container__plants--create
+    h2 Create a new plant
+    form.container__plants--form(method="post", action="/plants/create", enctype="multipart/form-data")
+      input(type="text", id="formPlantName", name="name", placeholder="Enter your plant name (Identifier)", value="")
+      label(for="formPlantPhoto") Photo:
+      input(type="file", id="formPlantPhoto", name="photo")
+      img(src="", id="imgPlantPhoto")
+      span(id="imgPlantIndicator", height="25px", width="100%")
+      input(type="checkbox", id="indoor", name="indoor")
+      label(for="indoor") Indoor
+      input(type="text", id="formPlantColor", name="color", value="")
+      input(type="submit", value="Create!")
+  section.container__plants--stats
+    h2 Plants List
+    span Plant count: #{plants.length}
+    span Watered today: #{plantsWatered.length}
+  section.container__plants--data
+    ul.plants__list
+      each plant in plants
+        li.plants__list--item(key=`${plant._id}`)
+          h3= plant.name
+          span Created at: #{plant.createdDate.toString().substring(0, 34)}
+          span Last Watering: #{plant.lastWatering.toString().substring(0, 34)}
+          span Location: #{plant.indoor ? "Indoor" : "Outdoor"}
+          span Condition: #{plant.condition.toFixed(2)}%
+          span Status: #{plant.status}
+          a(href=`/plants/${plant.initialPhoto}`) View Initial Photo
+          button.plants__list--water View details

@@ -1,0 +1,133 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Lato", sans-serif;
+  color: #4c4c4c;
+  background: #f8fdf3;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  padding: 0.3em;
+}
+
+.container__plants--create,
+.container__plants--details {
+  background: rgba(106, 249, 186, 1);
+  color: #fff;
+  margin: 0.3em;
+  padding: 0.3em;
+}
+
+.container__plants--create h2 {
+  border-bottom: solid 2px #fff;
+}
+
+.container__plants--stats {
+  margin: 0.5rem;
+}
+
+.container__plants--stats *,
+.container__plants--details * {
+  display: block;
+  padding-left: 0.5rem;
+}
+
+.form__water--form {
+  padding: 0;
+}
+
+.container__plants--form input:not([type="checkbox"]),
+.container__plants--form label:not([for="indoor"]) {
+  display: block;
+}
+
+#imgPlantIndicator {
+  display: block;
+  height: 25px;
+  width: 100%;
+  margin-top: 0.2em;
+}
+
+.container__plants--form label {
+  margin: 0.5em 0;
+  font-size: 1.2em;
+}
+
+.container__plants--form input[type="text"] {
+  margin: 0 auto;
+  padding: 12px;
+  font-size: 1.15em;
+  width: 90%;
+  border: none;
+  outline: none;
+}
+
+.container__plants--form input[type="submit"],
+.form__water--form input[type="submit"],
+.plants__list--item button.plants__list--water {
+  margin-top: 1em;
+  height: 40px;
+  width: 100%;
+  border: none;
+  background: #7bcbc4;
+  border-radius: 0.2em;
+  color: white;
+  cursor: pointer;
+}
+
+#formPlantColor,
+#imgPlantPhoto {
+  display: none;
+}
+
+.plants__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  margin: 0.3em;
+  list-style: none;
+  padding: 0;
+}
+
+.plants__list--item {
+  background: #fcfcfc;
+  padding: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 1px 14px rgba(0, 0, 0, 0.12);
+}
+
+.plants__list--item * {
+  display: block;
+}
+
+.plants__history {
+  max-width: 98vw;
+  margin: 0 auto;
+}
+
+a {
+  color: #00b7ff;
+}
+
+table tr td {
+  padding: 0.2em;
+  border: solid 2px #000;
+}
+
+
+table,
+th,
+td {
+  font-size: 0.9em;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+#chartHistory {
+  margin-top: 30px;
+  max-width: 95vw;
+}
