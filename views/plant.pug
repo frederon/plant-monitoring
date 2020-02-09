@@ -25,6 +25,7 @@ block content
         td Color
         td Condition
         td Type
+        td Photo
       each h in history
         tr
           td 
@@ -35,6 +36,8 @@ block content
             span #{(100-h.delta).toFixed(2)}%
           td
             span Manual
+          td
+            a(href=`/plants/${h.plantPhoto}`) View Photo
     h2 Graph
     canvas#chartHistory
   script(src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0")
@@ -66,7 +69,7 @@ block content
           const myChart = new Chart(ctx, {
             type: "line",
             data: {
-              labels: history.map(({ date }) => date.substring(0,10)),
+              labels: history.map(({ date }) => date.substring(0,10)).reverse(),
               datasets: [
                 {
                   label: "Condition",
@@ -81,7 +84,7 @@ block content
                   pointRadius: 3,
                   fill: false,
                   borderWidth: 4,
-                  data: history.map(({ delta }) => 100-delta),
+                  data: history.map(({ delta }) => 100-delta).reverse(),
                 },
               ],
             },

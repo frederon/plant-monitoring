@@ -100,11 +100,24 @@ router.post("/create", multer({ storage }).any(), function(req, res, next) {
     status: "Good",
     condition: 100,
   });
-  plant.save((data, err) => {
+  const data = new Data({
+    plant: plant.id,
+    plantPhoto: req.files[0].filename,
+    date: now,
+    color,
+    delta: 0,
+    type: "manual",
+  });
+  plant.save((d, err) => {
     if (err) {
       console.error(err);
     }
-    res.redirect("/");
+    data.save((d2, err) => {
+      if (err) {
+        console.error(err);
+      }
+      res.redirect("/");
+    });
   });
 });
 
