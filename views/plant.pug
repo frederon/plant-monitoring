@@ -62,7 +62,7 @@ block content
       const ctx = document.getElementById("chartHistory").getContext("2d");
       data.json().then(history => {
           const gradientStroke = ctx.createLinearGradient(0, 0, window.innerWidth, 0);
-          const colorsData = history.map(({ color }) => rgbToHex(...getRGB(color)))
+          const colorsData = history.map(({ color }) => rgbToHex(...getRGB(color))).reverse()
           colorsData.forEach((color, index) => {
             gradientStroke.addColorStop(index/colorsData.length, color);
           })
