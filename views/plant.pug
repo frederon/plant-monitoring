@@ -64,7 +64,7 @@ block content
           const gradientStroke = ctx.createLinearGradient(0, 0, window.innerWidth, 0);
           const colorsData = history.map(({ color }) => rgbToHex(...getRGB(color))).reverse()
           colorsData.forEach((color, index) => {
-            gradientStroke.addColorStop(index/colorsData.length, color);
+            gradientStroke.addColorStop(index/(colorsData.length-1), color);
           })
           const myChart = new Chart(ctx, {
             type: "line",
