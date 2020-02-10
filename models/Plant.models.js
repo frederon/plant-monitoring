@@ -11,6 +11,8 @@ const Plant = new Schema({
   lastWatering: Date,
   initialPhoto: String,
   initialColor: String,
+  lastColor: String,
+  lastPhoto: String,
   indoor: Boolean,
   status: String,
   condition: Number,

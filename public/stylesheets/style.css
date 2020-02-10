@@ -27,12 +27,14 @@ h2 {
   border-bottom: solid 2px #fff;
 }
 
-.container__plants--stats {
+.container__plants--stats,
+.container__weather {
   margin: 0.5rem;
 }
 
 .container__plants--stats *,
-.container__plants--details * {
+.container__plants--details *,
+.container__weather * {
   display: block;
   padding-left: 0.5rem;
 }
@@ -69,7 +71,8 @@ h2 {
 
 .container__plants--form input[type="submit"],
 .form__water--form input[type="submit"],
-.plants__list--item button.plants__list--water {
+.plants__list--item button.plants__list--water,
+.its_raining {
   margin-top: 1em;
   height: 40px;
   width: 100%;
@@ -117,7 +120,6 @@ table tr td {
   padding: 0.2em;
   border: solid 2px #000;
 }
-
 
 table,
 th,

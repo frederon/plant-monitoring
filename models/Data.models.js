@@ -8,6 +8,7 @@ const Data = new Schema({
   date: Date,
   color: String,
   delta: Number,
+  type: String,
 });
 
 module.exports = mongoose.model("Datas", Data);

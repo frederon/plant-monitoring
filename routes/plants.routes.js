@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-properties */
 const express = require("express");
 
@@ -54,20 +55,58 @@ function deltaE(rgbA, rgbB) {
   return i < 0 ? 0 : Math.sqrt(i);
 }
 
-router.get("/:id", (req, res, next) => {
-  Plant.findById(req.params.id).then(plant =>
-    Data.find({ plant: req.params.id }).then(data =>
-      res.render("plant", {
-        title: plant.name,
-        plant,
-        history: data.sort((a, b) =>
-          new Date(a.date) < new Date(b.date) ? 1 : -1
-        ),
-      })
-    )
-  );
+// POST TO WATER ALL OUTDOOR PLANTS
+router.get("/rain", function(req, res, next) {
+  Plant.find({ indoor: false }).then(plants => {
+    if (plants.length > 0) {
+      const now = new Date();
+      plants.forEach((plant, index) => {
+        Plant.findByIdAndUpdate(
+          plant.id,
+          {
+            $set: { lastWatering: now },
+          },
+          { useFindAndModify: false }
+        ).then(p => {
+          const data = new Data({
+            plant: p.id,
+            plantPhoto: p.lastPhoto,
+            date: now,
+            color: p.lastColor,
+            delta: 100 - p.condition,
+            type: "raining",
+          });
+          data.save((err, d) => {
+            if (index === plants.length - 1) {
+              res.redirect("/");
+            }
+          });
+        });
+      });
+    } else {
+      res.redirect("/");
+    }
+  });
 });
 
+// GET TO RENDER PLANT DETAILS PAGES
+router.get("/:id", (req, res, next) => {
+  Plant.findById(req.params.id)
+    .then(plant =>
+      Data.find({ plant: req.params.id }).then(data =>
+        res.render("plant", {
+          title: plant.name,
+          plant,
+          history: data.sort((a, b) =>
+            new Date(a.date) < new Date(b.date) ? 1 : -1
+          ),
+        })
+      )
+    )
+    .catch(() => res.send("plant not found!"));
+});
+
+// GET HISTORY OF WATERING
 router.get("/:id/water", (req, res, next) => {
   Data.find({ plant: req.params.id }).then(data =>
     res.json(
@@ -86,9 +125,9 @@ const storage = multer.diskStorage({
   },
 });
 
+// POST TO CREATE A PLANT
 router.post("/create", multer({ storage }).any(), function(req, res, next) {
   const { name, color, indoor } = req.body;
-  console.log(name, color, indoor);
   const now = new Date();
   const plant = new Plant({
     name,
@@ -96,8 +135,10 @@ router.post("/create", multer({ storage }).any(), function(req, res, next) {
     lastWatering: now,
     initialPhoto: req.files[0].filename,
     initialColor: color,
+    lastColor: color,
+    lastPhoto: req.files[0].filename,
     indoor: indoor !== undefined,
-    status: "Good",
+    status: "Healthy",
     condition: 100,
   });
   const data = new Data({
@@ -121,6 +162,7 @@ router.post("/create", multer({ storage }).any(), function(req, res, next) {
   });
 });
 
+// POST TO WATER A PLANT
 router.post("/water/:id", multer({ storage }).any(), function(req, res, next) {
   const { color } = req.body;
   const now = new Date();
@@ -140,12 +182,20 @@ router.post("/water/:id", multer({ storage }).any(), function(req, res, next) {
       delta,
       type: "manual",
     });
-    console.log(delta, typeof plant);
     Plant.findByIdAndUpdate(
       req.params.id,
       {
         $set: {
-          status: 100 - delta < 88 ? "Bad" : "Good",
+          lastColor: color,
+          lastPhoto: req.files[0].filename,
+          status:
+            100 - delta > 90
+              ? "Healthy"
+              : 100 - delta > 80
+              ? "Normal"
+              : 100 - delta > 70
+              ? "Poor"
+              : "Maybe dead",
           condition: 100 - delta,
         },
       },

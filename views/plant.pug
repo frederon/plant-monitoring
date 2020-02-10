@@ -35,7 +35,7 @@ block content
           td 
             span #{(100-h.delta).toFixed(2)}%
           td
-            span Manual
+            span #{h.type.substring(0,1).toUpperCase() + h.type.substring(1)}
           td
             a(href=`/plants/${h.plantPhoto}`) View Photo
     h2 Graph
