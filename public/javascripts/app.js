@@ -1,5 +1,9 @@
 /* eslint-disable no-undef */
 $(document).ready(function() {
+  function arrayToRGB([r, g, b]) {
+    return `rgba(${r}, ${g}, ${b}, 1)`;
+  }
+
   $(
     "#formPlantPhoto, label[for='formPlantPhoto'], #formPhotoWater, label[for='formPhotoWater']"
   ).click(function() {
@@ -8,21 +12,23 @@ $(document).ready(function() {
 
   $("#formPlantPhoto, #formPhotoWater").change(function() {
     // eslint-disable-next-line no-undef
-    const fac = new FastAverageColor();
+    const colorThief = new ColorThief();
     const image = document.getElementById("imgPlantPhoto");
     image.src = URL.createObjectURL(this.files[0]);
-
     const indicator = document.querySelector("#imgPlantIndicator");
-    fac
-      .getColorAsync(image)
-      .then(function(color) {
-        indicator.style.backgroundColor = color.rgba;
-        $("#formPlantColor").val(color.rgba);
-        indicator.style.color = color.isDark ? "#fff" : "#000";
-      })
-      .catch(function(e) {
-        console.log(e);
+
+    // Make sure image is finished loading
+    if (image.complete) {
+      const dominant = colorThief.getColor(image);
+      indicator.style.backgroundColor = arrayToRGB(dominant);
+      $("#formPlantColor").val(arrayToRGB(dominant));
+    } else {
+      image.addEventListener("load", function() {
+        const dominant = colorThief.getColor(image);
+        indicator.style.backgroundColor = arrayToRGB(dominant);
+        $("#formPlantColor").val(arrayToRGB(dominant));
       });
+    }
   });
 
   $(".plants__list--water").click(e => {
