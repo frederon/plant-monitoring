@@ -10,6 +10,7 @@ block content
     span Condition: #{plant.condition.toFixed(2)}%
     span Status: #{plant.status}
     a(href=`/plants/${plant.initialPhoto}`) View Initial Photo
+    a(href=`/plants/${plant.id}/remove`) Delete Plants
     form(class="form__water--form", action=`/plants/water/${plant.id}`, method="post", enctype="multipart/form-data")
       h3 Photo after watering:
       input(type="file", id="formPhotoWater", name="photoWater")

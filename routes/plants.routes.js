@@ -106,6 +106,18 @@ router.get("/:id", (req, res, next) => {
     .catch(() => res.send("plant not found!"));
 });
 
+router.get("/:id/remove", (req, res, next) => {
+  Plant.findByIdAndRemove(req.params.id, () => {
+    Data.deleteMany({ plant: req.params.id }, err => {
+      if (err) {
+        res.send(`Error deleting plant with id: ${req.params.id}`);
+      } else {
+        res.redirect("/");
+      }
+    });
+  });
+});
+
 // GET HISTORY OF WATERING
 router.get("/:id/water", (req, res, next) => {
   Data.find({ plant: req.params.id }).then(data =>
